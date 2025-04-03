@@ -1,37 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohassani <ohassani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/19 19:48:01 by ohassani          #+#    #+#             */
-/*   Updated: 2025/01/19 19:53:57 by ohassani         ###   ########.fr       */
+/*   Created: 2025/01/19 19:48:34 by ohassani          #+#    #+#             */
+/*   Updated: 2025/01/19 20:01:27 by ohassani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
-int	ft_atoi(const char *str)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	int	i;
-	int	res;
-	int	sign;
+	unsigned char	*destination;
+	unsigned char	*source;
 
-	i = 0;
-	res = 0;
-	sign = 1;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-		i++;
-	if (str[i] == '-' || str[i] == '+')
+	if (!dest && !src)
+		return (NULL);
+	if (dest == src)
+		return ((void *)src);
+	destination = (unsigned char *)dest;
+	source = (unsigned char *)src;
+	if (source < destination)
 	{
-		if (str[i] == '-')
-			sign = sign * -1;
-		i++;
+		while (n > 0)
+		{
+			destination[n - 1] = source[n - 1];
+			n--;
+		}
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	else
 	{
-		res = (res * 10) + (str[i] - 48);
-		i++;
+		while (n-- > 0)
+			*destination++ = *source++;
 	}
-	return (res * sign);
+	return (dest);
 }

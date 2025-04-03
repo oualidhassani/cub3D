@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohassani <ohassani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 16:27:46 by ohassani          #+#    #+#             */
-/*   Updated: 2023/11/10 21:01:18 by ohassani         ###   ########.fr       */
+/*   Created: 2025/01/19 19:49:18 by ohassani          #+#    #+#             */
+/*   Updated: 2025/01/19 20:02:19 by ohassani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 size_t	ft_strlen(const char *s)
 {
-	size_t	c;
+	size_t	i;
 
-	c = 0;
-	while (s[c] != '\0')
-	{
-		c++;
-	}
-	return (c);
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }

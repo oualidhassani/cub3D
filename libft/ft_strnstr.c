@@ -1,21 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohassani <ohassani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/19 19:48:44 by ohassani          #+#    #+#             */
-/*   Updated: 2025/01/19 20:01:34 by ohassani         ###   ########.fr       */
+/*   Created: 2025/01/19 19:49:25 by ohassani          #+#    #+#             */
+/*   Updated: 2025/01/19 20:02:30 by ohassani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
-	if (fd < 0 || !s)
-		return ;
-	while (*s)
-		ft_putchar_fd(*s++, fd);
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	if (*little == '\0')
+		return ((char *)big);
+	while (little[j] != '\0')
+		j++;
+	while (i < len && big[i] != '\0' && (i + j) <= len)
+	{
+		if (big[i] == little[0] && ft_strncmp(&big[i], little, j) == 0)
+		{
+			return ((char *)&big[i]);
+		}
+		i++;
+	}
+	return (0);
 }

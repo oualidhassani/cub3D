@@ -5,94 +5,114 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohassani <ohassani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/12 14:51:20 by ohassani          #+#    #+#             */
-/*   Updated: 2024/03/13 15:13:29 by ohassani         ###   ########.fr       */
+/*   Created: 2025/01/19 19:48:51 by ohassani          #+#    #+#             */
+/*   Updated: 2025/01/19 20:01:36 by ohassani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	**ft_free2(char **fr)
+static char	**freearray(char **arr)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	while (fr[i])
+	while (arr[i] != NULL)
 	{
-		free(fr[i]);
+		free(arr[i]);
 		i++;
 	}
-	free (fr);
-	return (0);
+	free(arr);
+	return (NULL);
 }
 
-static char	*small_alloc(char const *str, int *index, char separator)
+static char	**write_to_arr(char const *s, char **arr, char *tmp_str, char c)
 {
-	char	*ptr;
-	int		len;
-	int		pos;
-	int		k;
+	int	i;
+	int	j;
 
-	len = 0;
-	while (str[*index] == separator && str[*index])
-		(*index)++;
-	pos = *index;
-	while (str[*index] != separator && str[*index])
-		(*index)++;
-	len = *index - pos;
-	ptr = malloc(sizeof(char) * (len + 1));
-	if (!ptr)
-		return (*ft_free2(&ptr));
-	k = 0;
-	while (k < len)
-	{
-		ptr[k] = str[pos];
-		k++;
-		pos++;
-	}
-	ptr[k] = '\0';
-	return (ptr);
-}
-
-static int	count_words(char const *str, char c)
-{
-	size_t	wo;
-	size_t	i;
-
-	wo = 0;
 	i = 0;
-	while (str[i])
+	j = 0;
+	if (s[0] != c)
 	{
-		while (str[i] == c)
-			i++;
-		if (str[i])
-			wo++;
-		while (str[i] && str[i] != c)
-			i++;
+		arr[j] = ft_strdup(&tmp_str[0]);
+		if (!arr[j])
+			return (freearray(arr));
+		j++;
 	}
-	return (wo);
+	while (s[i] != '\0')
+	{
+		if ((s[i] == c) && (s[i + 1] != c) && (s[i + 1] != '\0'))
+		{
+			arr[j] = ft_strdup(&tmp_str[i + 1]);
+			if (!arr[j])
+				return (freearray(arr));
+			j++;
+		}
+		i++;
+	}
+	arr[j] = 0;
+	return (arr);
+}
+
+int	get_size(char const *s, char *tmp_str, char c)
+{
+	int		i;
+	size_t	size;
+
+	i = 0;
+	size = 0;
+	while (s[i] != '\0')
+	{
+		if ((s[i] != c) && ((s[i + 1] == c) || (s[i + 1] == '\0')))
+		{
+			size++;
+			tmp_str[i + 1] = '\0';
+		}
+		i++;
+	}
+	return (size);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**ptr;
-	int		i;
-	int		count;
-	int		j;
+	char	*tmp_str;
+	char	**arr;
+	int		size;
 
-	j = 0;
-	if (s == NULL)
+	size = 0;
+	if (!s)
 		return (NULL);
-	count = count_words(s, c);
-	ptr = (char **)malloc(sizeof(char *) * (count + 1));
-	if (!ptr)
-		return (NULL);
-	ptr[count] = NULL;
-	i = 0;
-	while (j < count)
+	tmp_str = ft_strdup(s);
+	if (!tmp_str)
+		return (0);
+	size = get_size(s, tmp_str, c);
+	arr = (char **)malloc(sizeof(char *) * (size + 1));
+	if (!arr)
 	{
-		ptr[j] = small_alloc(s, &i, c);
-		j++;
+		free(tmp_str);
+		return (NULL);
 	}
-	return (ptr);
+	if (size == 0)
+		arr[0] = NULL;
+	else
+		arr = write_to_arr(s, arr, tmp_str, c);
+	free(tmp_str);
+	return (arr);
 }
+
+// #include <stdio.h>
+// int main()
+// {
+//     char **strings;
+//     int i  = 0;
+//     strings = ft_split("shadow wizard money gang", ' ');
+//      while (strings[i] != NULL) {
+//         printf("%s\n", strings[i]);
+//         i++;
+//     }
+//     for (int i = 0; strings[i] != NULL; ++i)
+// 		free(strings[i]);
+// 	free(strings);
+//     return (0);
+// }

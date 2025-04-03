@@ -5,54 +5,77 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohassani <ohassani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/10 12:06:15 by ohassani          #+#    #+#             */
-/*   Updated: 2024/03/06 19:15:30 by ohassani         ###   ########.fr       */
+/*   Created: 2025/01/19 19:48:23 by ohassani          #+#    #+#             */
+/*   Updated: 2025/01/19 20:01:14 by ohassani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	positive(int n)
+static char	*write_to_arr(char *arr, unsigned int n, int pos, int size)
 {
-	if (n < 0)
-		return (-n);
-	return (n);
+	int	i;
+
+	i = 0;
+	arr = (char *)malloc((size + pos + 1) * sizeof(char));
+	if (!arr)
+		return (0);
+	if (n == 0)
+		arr[i++] = 0 + 48;
+	while (n)
+	{
+		arr[i++] = (n % 10) + 48;
+		n = n / 10;
+	}
+	if (pos == 1)
+		arr[i++] = '-';
+	arr[i] = '\0';
+	return (arr);
 }
 
-int	counter(int n)
+static char	*ft_strrev(char *str)
 {
-	int	digit;
+	int		i;
+	int		size;
+	char	tmp;
 
-	digit = 0;
-	if (n <= 0)
-		digit++;
-	while (n != 0)
+	i = 0;
+	size = ft_strlen(str) - 1;
+	while (i < size)
 	{
-		n = n / 10;
-		digit++;
+		tmp = str[i];
+		str[i] = str[size];
+		str[size] = tmp;
+		i++;
+		size--;
 	}
-	return (digit);
+	return (str);
 }
 
 char	*ft_itoa(int n)
 {
-	char		*ptr;
-	long int	i;
+	int		size;
+	int		nb;
+	char	*arr;
 
-	i = counter(n);
-	ptr = malloc(i + 1);
-	if (ptr == NULL)
-		return (NULL);
-	ptr[i] = '\0';
-	if (n < 0)
-		ptr[0] = '-';
-	else if (n == 0)
-		ptr[0] = '0';
-	while (n != 0)
+	size = 0;
+	nb = n;
+	arr = NULL;
+	if (nb == 0)
+		size = 1;
+	while (nb)
 	{
-		i--;
-		ptr[i] = positive(n % 10) + 48;
-		n = n / 10;
+		nb = nb / 10;
+		size++;
 	}
-	return (ptr);
+	if (n < 0)
+	{
+		arr = write_to_arr(arr, (n * -1), 1, size);
+	}
+	else
+		arr = write_to_arr(arr, n, 0, size);
+	if (!arr)
+		return (0);
+	arr = ft_strrev(arr);
+	return (arr);
 }

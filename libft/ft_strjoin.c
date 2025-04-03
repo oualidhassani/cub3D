@@ -1,25 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohassani <ohassani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/19 19:49:23 by ohassani          #+#    #+#             */
-/*   Updated: 2025/01/19 20:02:26 by ohassani         ###   ########.fr       */
+/*   Created: 2025/01/19 19:49:09 by ohassani          #+#    #+#             */
+/*   Updated: 2025/01/19 20:02:13 by ohassani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	i;
+	int		size1;
+	int		size2;
+	char	*newstr;
 
-	i = 0;
-	if (n == 0)
+	if (!s1 && !s2)
+		return (NULL);
+	if (!s1)
+		return (ft_strdup(s2));
+	else if (!s2)
+		return (ft_strdup(s1));
+	size1 = ft_strlen(s1);
+	size2 = ft_strlen(s2);
+	newstr = (char *)malloc((size1 + size2 + 1) * sizeof(char));
+	if (!newstr)
 		return (0);
-	while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i] && i < n - 1)
-		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	ft_memcpy(newstr, s1, size1);
+	ft_memcpy(newstr + size1, s2, size2);
+	newstr[size1 + size2] = '\0';
+	return (newstr);
 }
